@@ -59,22 +59,21 @@ def showBoard (squ, board):
 def resetGame(squ):
     # initialize the board and return it as a variable
     # ---------------------------------------------------------------
-    # squ : get access to tthe pyGame display variable
-    global squ
-
+    global  winner
+    global  grid
+    global  player
+        
     # set up the background surface
     background = pygame.Surface (squ.get_size())
     background = background.convert()
     background.fill (pygame.color.Color('WHEAT'))
     #background.fill ((250, 250, 250))
-    showBoard(squ, board)
-
+    
     # draw the marker dots
     for xpos in range(50, 500, 100):
         for ypos in range(50, 500, 100):
             pygame.draw.circle (background, pygame.color.Color('BLACK'), (xpos, ypos), 4)
-    showBoard(squ, board)
-
+    
     winner = None
     player   = "R"   # track whose turn it is; R(ed) or B(lue)
 

@@ -1,4 +1,4 @@
-# from N. Yergler. teaching-python-with-pygame
+# Thanks to N. Yergler. teaching-python-with-pygame
 #!/usr/bin/python
 
 # Tic-Tac-Toe

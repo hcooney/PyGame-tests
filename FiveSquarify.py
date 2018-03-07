@@ -152,18 +152,37 @@ def drawMove (board, boardRow, boardCol, player):
 
 
 def drawLine(fromX, fromY, toX, toY, board):
-    # draw a line between two points on the board
+    # draw a line between two dots on the board
     # ---------------------------------------------------------------
     # board     : the game board surface
     # fromX,
-    # fromY     : the Row & Col of the starting position (0 based)
-    # toX, toY  : the Row & Col of the ending position (0 based)
+    # fromY     : the Row & Col of the starting dot (0 based)
+    # toX, toY  : the Row & Col of the ending dot (0 based)
     
     # check for winning rows
     lineColor = pygame.color.Color('BLACK')
     pygame.draw.line (board, lineColor, (fromX*100 + 50, fromY*100 + 50), \
                                         (toX*100 +50,    toY*100 + 50), 2)
-   
+
+
+def findSquare(ax, ay, bx, by):
+    # given 2 dots locate and return the coordinates of 2 other dots that could form a square 
+    # ---------------------------------------------------------------
+    # ax, ay    : the coordinates of dot A
+    # bx, by    : the coordinates of dot B
+    
+    winner = None 
+    cx, cy = 2, 0
+    dx, dy = 2, 2
+
+    if ((grid [ax][ay] == grid[bx][by] == grid[cx][cy] == grid[dx][dy]) and \
+           (grid[ax][ay] is not None)):
+            # this is a square
+
+            winner = grid[ax][ay]
+
+    # return the coordinates of the 2 dots that were identified
+    return (winner, cx, cy, dx, dy)
 
 def gameWon(board):
     # determine if anyone has won the game
@@ -172,34 +191,20 @@ def gameWon(board):
     
     global grid, winner
 
-    # Check square with corners a, b, c, d
+    # Locate 2 spots with the same colour and the the other 2 corners to see if it is a square
+
+    # Check square with corners a, b
     ax, ay = 0, 0
     bx, by = 0, 2
-    cx, cy = 2, 0
-    dx, dy = 2, 2
-    # check for winning rows
-    if ((grid [ax][ay] == grid[bx][by] == grid[cx][cy] == grid[dx][dy]) and \
-           (grid [ax][ay] is not None)):
-            # this is a square
-
-            winner = grid[ax][ay]
-
+    (winner, cx, cy, dx, dy) = findSquare(ax, ay, bx, by)
+    
+    # If we have a winner draw the box
+    if winner is not None:
             drawLine(ax, ay, bx, by, board)
             drawLine(bx, by, dx, dy, board)
             drawLine(dx, dy, cx, cy, board)
             drawLine(cx, cy, ax, ay, board)
     
-
-    # check for winning rows
-    #for row in range (0, 3):
-    #    if ((grid [row][0] == grid[row][1] == grid[row][2]) and \
-    #       (grid [row][0] is not None)):
-    #        # this row won
-    #         winner = grid[row][0]
-    #         pygame.draw.line (board, (250,0,0), (0, (row + 1)*100 - 50), \
-    #                           (300, (row + 1)*100 - 50), 2)
-    #         break
-
 
 # --------------------------------------------------------------------
 # initialize pygame and our window

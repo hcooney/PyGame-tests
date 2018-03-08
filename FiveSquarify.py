@@ -7,6 +7,7 @@
 # March 2018
 
 # import necessary modules
+import itertools
 import pygame
 from pygame.locals import *
 
@@ -189,21 +190,30 @@ def gameWon(board):
     # ---------------------------------------------------------------
     # board : the game board surface
     
-    global grid, winner
+    global grid, winner, player
 
     # Locate 2 spots with the same colour and the the other 2 corners to see if it is a square
-
-    # Check square with corners a, b
-    ax, ay = 0, 0
-    bx, by = 0, 2
-    (winner, cx, cy, dx, dy) = findSquare(ax, ay, bx, by)
     
-    # If we have a winner draw the box
-    if winner is not None:
+    # flatten the grid to a simple list; then return the subscript of entries that are not None
+    dots = list(itertools.chain(*grid))
+    match = [i for i, x in enumerate(dots) if x == player]
+    for pair in itertools.combinations(match, r=2):
+        # generate grid coordinates in the x,y style from the subscripts
+        a , b = pair
+        ax = int(a / 5)
+        ay =     a % 5
+        bx = int(b / 5)
+        by =     b % 5
+        # Check square with corners a, b
+        (winner, cx, cy, dx, dy) = findSquare(ax, ay, bx, by)
+    
+        # If we have a winner draw the box
+        if winner is not None:
             drawLine(ax, ay, bx, by, board)
             drawLine(bx, by, dx, dy, board)
             drawLine(dx, dy, cx, cy, board)
             drawLine(cx, cy, ax, ay, board)
+            break
     
 
 # --------------------------------------------------------------------
